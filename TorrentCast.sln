@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorrentCast", "TorrentCast\TorrentCast.csproj", "{F71BBB60-1E98-46B0-BE88-E01EE0DAA04C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F71BBB60-1E98-46B0-BE88-E01EE0DAA04C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F71BBB60-1E98-46B0-BE88-E01EE0DAA04C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F71BBB60-1E98-46B0-BE88-E01EE0DAA04C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F71BBB60-1E98-46B0-BE88-E01EE0DAA04C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D08FA564-9584-4C16-87CC-D038B77A3F42}
+	EndGlobalSection
+EndGlobal
