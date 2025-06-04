@@ -1,0 +1,8 @@
+{
+  "ftpHost": "haze.seedhost.eu",
+  "ftpPort": 21,
+  "username": "argentius",
+  "password": "hQGg@Wsq7$V**9P@",
+  "remotePath": "/downloads/grab",
+  "useSftp": true
+}
