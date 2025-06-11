@@ -30,9 +30,8 @@ namespace TorrentCast
 
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
                 {
-                    //MessageBox.Show($"FTP Upload complete: {response.StatusDescription}");
-                    
-                    if (response.StatusCode == FtpStatusCode.CommandOK)
+                    //check if 226 response                    
+                    if (response.StatusCode == FtpStatusCode.ClosingData)
                     {
                         fileKit.archiveFiles(filePath);
                     }
