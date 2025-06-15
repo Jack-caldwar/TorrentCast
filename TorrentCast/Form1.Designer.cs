@@ -44,6 +44,8 @@ namespace TorrentCast
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.torrentCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -119,67 +121,94 @@ namespace TorrentCast
             // 
             // button5
             // 
+            this.button5.BackColor = System.Drawing.Color.Gold;
             this.button5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.button5.Location = new System.Drawing.Point(6, 25);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(114, 41);
             this.button5.TabIndex = 4;
             this.button5.Text = "Failed";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
+            this.button4.BackColor = System.Drawing.Color.Gold;
             this.button4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.button4.Location = new System.Drawing.Point(126, 25);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(114, 41);
             this.button4.TabIndex = 3;
             this.button4.Text = "Archived";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
-            this.button3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button3.BackColor = System.Drawing.Color.Gold;
+            this.button3.ForeColor = System.Drawing.Color.Black;
             this.button3.Location = new System.Drawing.Point(543, 25);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(107, 41);
             this.button3.TabIndex = 2;
             this.button3.Text = "Clear";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.Gold;
             this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.button2.Location = new System.Drawing.Point(281, 25);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(107, 41);
             this.button2.TabIndex = 1;
             this.button2.Text = "Go";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.Gold;
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.button1.Location = new System.Drawing.Point(423, 25);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 41);
             this.button1.TabIndex = 0;
             this.button1.Text = "Config";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.label1.Location = new System.Drawing.Point(289, 744);
+            this.label1.Location = new System.Drawing.Point(549, 744);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(119, 20);
             this.label1.TabIndex = 2;
             this.label1.Text = "TorrentCast 1.0";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label2.Location = new System.Drawing.Point(12, 744);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(134, 20);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Pending Torrents:";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // torrentCount
+            // 
+            this.torrentCount.AutoSize = true;
+            this.torrentCount.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.torrentCount.Location = new System.Drawing.Point(137, 744);
+            this.torrentCount.Name = "torrentCount";
+            this.torrentCount.Size = new System.Drawing.Size(18, 20);
+            this.torrentCount.TabIndex = 4;
+            this.torrentCount.Text = "0";
             // 
             // Form1
             // 
@@ -188,6 +217,8 @@ namespace TorrentCast
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.DarkSlateBlue;
             this.ClientSize = new System.Drawing.Size(678, 869);
+            this.Controls.Add(this.torrentCount);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dataGridView1);
@@ -216,6 +247,8 @@ namespace TorrentCast
         private DataGridViewTextBoxColumn actions;
         private Button button4;
         private Button button5;
+        private Label label2;
+        private Label torrentCount;
     }
 }
 

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace TorrentCast
@@ -25,24 +19,47 @@ namespace TorrentCast
         {
             // Display the configuration in the form controls
             usernameTextbox.Text = config.username;
+            MessageBox.Show(config.password);
+            Debug.WriteLine("stored enc password in config :" + config.password);
+            string password = cryptoKit.DecryptString(config.password);
             passwordTextbox.Text = config.password;
             urlTextbox.Text = config.ftpHost;
             porttextbox.Text = config.ftpPort;
             remoteDirTextbox.Text = config.remotePath;
+            // mb.Text = cryptoKit.GetMotherboardSerial() ?? "Unknown Motherboard Serial";
         }
 
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ApplicationConfig config = new ApplicationConfig();
-            config.username = usernameTextbox.Text;
-            config.password = passwordTextbox.Text;
-            config.ftpHost = urlTextbox.Text;
-            config.ftpPort = porttextbox.Text;
-            config.remotePath = remoteDirTextbox.Text;
-            config.SaveConfig();
-            MessageBox.Show("Configuration Updated!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close(); 
+            if (
+                string.IsNullOrWhiteSpace(usernameTextbox.Text) ||
+                string.IsNullOrWhiteSpace(passwordTextbox.Text) ||
+                string.IsNullOrWhiteSpace(urlTextbox.Text) ||
+                string.IsNullOrWhiteSpace(porttextbox.Text) ||
+                string.IsNullOrWhiteSpace(remoteDirTextbox.Text)
+                )
+            {
+                MessageBox.Show("You need to fill all fields!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                ApplicationConfig config = new ApplicationConfig();
+                config.username = usernameTextbox.Text;
+
+                string password = cryptoKit.EncryptString(passwordTextbox.Text);
+                config.password = password;
+
+                //config.password = passwordTextbox.Text;
+                config.ftpHost = urlTextbox.Text;
+                config.ftpPort = porttextbox.Text;
+                config.remotePath = remoteDirTextbox.Text;
+                config.SaveConfig();
+                MessageBox.Show("Configuration Updated!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+
+
         }
     }
 }

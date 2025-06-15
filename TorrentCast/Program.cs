@@ -7,6 +7,9 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.IO.Pipes;
+using System.Windows.Input;
+using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace TorrentCast
 {
@@ -56,6 +59,24 @@ namespace TorrentCast
                 });
                 listenerThread.IsBackground = true;
                 listenerThread.Start();
+
+                //experiment
+
+                // int hashed = cryptoKit.GetMotherboardSerial().GetHashCode();
+                // byte[] key, iv;
+                // var sha256 = SHA256.Create();
+                //
+                // key = sha256.ComputeHash(BitConverter.GetBytes(hashed)); // 256-bit key
+                // iv = new byte[16]; // 128-bit IV, can be random or fixed
+
+                /*
+                string enc = cryptoKit.EncryptString("hQGg@Wsq7$V**9P@");
+                 MessageBox.Show(enc, "Encrypted Password");
+                Debug.WriteLine(enc);
+                // N+iREG46kpzEuEuV7IQoDTk+LIPH5hfHuxAKlUyg9hs=
+                string dec = cryptoKit.DecryptString(enc);
+                 MessageBox.Show(dec, "Decrypted Password");
+                */
                 try
                 {
                     Application.EnableVisualStyles();

@@ -139,6 +139,31 @@ namespace TorrentCast
                 }
             }
         }
+        internal static void DeleteActive()
+        {
+            String destination = "Active";
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string destinationDir = Path.Combine(localDirectory, destination);
+
+            string[] ActiveTorrents = Array.Empty<string>();
+
+            if (Directory.Exists(destinationDir))
+            {
+                ActiveTorrents = Directory.GetFiles(destinationDir);
+                foreach (var torrent in ActiveTorrents)
+                {
+                    try
+                    {
+                        File.Delete(torrent);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Cannot Delete " + torrent + "\n" + ex.Message);
+
+                    }
+                }
+            }
+        }
 
         public static void MoveFailed(string path)
         {

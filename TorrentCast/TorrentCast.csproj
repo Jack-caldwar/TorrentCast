@@ -59,6 +59,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,6 +79,7 @@
     <Compile Include="Archived.Designer.cs">
       <DependentUpon>Archived.cs</DependentUpon>
     </Compile>
+    <Compile Include="cryptoKit.cs" />
     <Compile Include="fileKit.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

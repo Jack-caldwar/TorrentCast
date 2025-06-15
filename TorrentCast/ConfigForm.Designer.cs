@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.remoteDirTextbox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.porttextbox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.passwordTextbox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -37,10 +41,6 @@
             this.urlTextbox = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.button1 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.porttextbox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.remoteDirTextbox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,6 +63,38 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Server Details";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 219);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 20);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Remote Dir";
+            // 
+            // remoteDirTextbox
+            // 
+            this.remoteDirTextbox.Location = new System.Drawing.Point(111, 216);
+            this.remoteDirTextbox.Name = "remoteDirTextbox";
+            this.remoteDirTextbox.Size = new System.Drawing.Size(447, 26);
+            this.remoteDirTextbox.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 181);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 20);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Port";
+            // 
+            // porttextbox
+            // 
+            this.porttextbox.Location = new System.Drawing.Point(111, 175);
+            this.porttextbox.Name = "porttextbox";
+            this.porttextbox.Size = new System.Drawing.Size(447, 26);
+            this.porttextbox.TabIndex = 6;
             // 
             // label2
             // 
@@ -115,45 +147,13 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(249, 307);
+            this.button1.Location = new System.Drawing.Point(261, 307);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(149, 57);
             this.button1.TabIndex = 1;
             this.button1.Text = "Save";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 181);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 20);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Port";
-            // 
-            // porttextbox
-            // 
-            this.porttextbox.Location = new System.Drawing.Point(111, 175);
-            this.porttextbox.Name = "porttextbox";
-            this.porttextbox.Size = new System.Drawing.Size(447, 26);
-            this.porttextbox.TabIndex = 6;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 219);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 20);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Remote Dir";
-            // 
-            // remoteDirTextbox
-            // 
-            this.remoteDirTextbox.Location = new System.Drawing.Point(111, 216);
-            this.remoteDirTextbox.Name = "remoteDirTextbox";
-            this.remoteDirTextbox.Size = new System.Drawing.Size(447, 26);
-            this.remoteDirTextbox.TabIndex = 8;
             // 
             // ConfigForm
             // 

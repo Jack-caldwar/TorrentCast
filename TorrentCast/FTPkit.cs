@@ -16,7 +16,7 @@ namespace TorrentCast
                 string uploadUrl = $"ftp://{config.ftpHost}:{config.ftpPort}/{config.remotePath}/" + fileName;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(uploadUrl);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
-                request.Credentials = new NetworkCredential(config.username, config.password);
+                request.Credentials = new NetworkCredential(config.username, cryptoKit.DecryptString(config.password));
                 request.UsePassive = true;
                 request.UseBinary = true;
                 request.KeepAlive = false;

@@ -10,6 +10,8 @@ namespace TorrentCast
 {
     public partial class Form1 : Form
     {
+        int counter = 0;
+
         private ApplicationConfig config;
         public Form1(ApplicationConfig config)
         {
@@ -28,7 +30,22 @@ namespace TorrentCast
                 // check active folder for new files
                 // if new files are found, add them to the list
                 string[] newActiveFileList = getActiveFileList();
-                populateFileList(newActiveFileList);
+
+                int rowCount = dataGridView1.RowCount - 1;
+                torrentCount.Text = rowCount.ToString();
+
+
+                int pendingFiles = newActiveFileList.Length;
+
+
+                if (pendingFiles != 0)
+                {
+                    if(pendingFiles != rowCount)
+                    {
+                        populateFileList(newActiveFileList);
+                    }                    
+                }
+                
             };
             timer.Start();
 
@@ -140,6 +157,16 @@ namespace TorrentCast
         {
             FailedUi failedForm = new FailedUi();
             failedForm.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
