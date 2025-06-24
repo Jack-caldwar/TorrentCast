@@ -19,9 +19,30 @@ namespace TorrentCast
 
             string fileName = Path.GetFileName(path);
             destination = Path.Combine(destinationDir, fileName);
-            File.Move(path, destination);
+
+            MoveOrReplace(path, destination);
 
 
+        }
+
+        private static void MoveOrReplace(string sourcePath, string destinationPath)
+        {
+            try
+            {
+                if (File.Exists(destinationPath))
+                {
+                    File.Delete(destinationPath);
+                }
+                else
+                {
+                    File.Move(sourcePath, destinationPath);
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                //show error dialog
+                MessageBox.Show("Error moving torrent \r\n Cannot locate :" + sourcePath + " \n \n Details :\n" + e.Message);
+            }
         }
 
         public static void moveFilesToActive(string[] paths)
@@ -39,7 +60,7 @@ namespace TorrentCast
                 destination = Path.Combine(destinationDir, fileName);
                 if (!fileName.Contains(".exe"))
                 {
-                    File.Move(path, destination);
+                    MoveOrReplace(path, destination);
                 }
             }
         }
@@ -176,7 +197,7 @@ namespace TorrentCast
 
             string fileName = Path.GetFileName(path);
             destination = Path.Combine(destinationDir, fileName);
-            File.Move(path, destination);
+            MoveOrReplace(path, destination);
         }
     }
 }

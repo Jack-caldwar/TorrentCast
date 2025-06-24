@@ -6,9 +6,9 @@ namespace TorrentCast
 {
     internal class FTPkit
     {
-        public static void UploadViaFtp(ApplicationConfig config, string[] files)
+        public static int UploadViaFtp(ApplicationConfig config, string[] files)
         {
-
+            int counter = 0;
             foreach (var file in files)
             {
                 string filePath = file;
@@ -34,6 +34,7 @@ namespace TorrentCast
                     if (response.StatusCode == FtpStatusCode.ClosingData)
                     {
                         fileKit.archiveFiles(filePath);
+                        counter++;
                     }
                     else
                     {
@@ -41,7 +42,7 @@ namespace TorrentCast
                     }
                 }
             }
-
+            return counter;
         }
 
     }

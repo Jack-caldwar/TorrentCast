@@ -60,23 +60,7 @@ namespace TorrentCast
                 listenerThread.IsBackground = true;
                 listenerThread.Start();
 
-                //experiment
 
-                // int hashed = cryptoKit.GetMotherboardSerial().GetHashCode();
-                // byte[] key, iv;
-                // var sha256 = SHA256.Create();
-                //
-                // key = sha256.ComputeHash(BitConverter.GetBytes(hashed)); // 256-bit key
-                // iv = new byte[16]; // 128-bit IV, can be random or fixed
-
-                /*
-                string enc = cryptoKit.EncryptString("hQGg@Wsq7$V**9P@");
-                 MessageBox.Show(enc, "Encrypted Password");
-                Debug.WriteLine(enc);
-                // N+iREG46kpzEuEuV7IQoDTk+LIPH5hfHuxAKlUyg9hs=
-                string dec = cryptoKit.DecryptString(enc);
-                 MessageBox.Show(dec, "Decrypted Password");
-                */
                 try
                 {
                     Application.EnableVisualStyles();
@@ -114,15 +98,6 @@ namespace TorrentCast
                 }
             }
 
-
-            void DebugOutputConfig()
-            {
-                String readOutConfig = ".username :" + config.username + " password :" + config.password + " server :" +
-                                       config.ftpHost + " port :" + config.ftpPort + " activeFolder :" +
-                                       config.activeFolder + " archiveFolder :" + config.archiveFolder +
-                                       " torrentFolder :" + config.remotePath;
-                MessageBox.Show(readOutConfig);
-            }
         }
 
         private static String[] GetTorrentPaths()

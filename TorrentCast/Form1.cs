@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -23,7 +25,7 @@ namespace TorrentCast
 
             DispatcherTimer timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromSeconds(2) // Adjust to your needs
+                Interval = TimeSpan.FromSeconds(2) 
             };
             timer.Tick += (sender, e) =>
             {
@@ -40,16 +42,17 @@ namespace TorrentCast
 
                 if (pendingFiles != 0)
                 {
-                    if(pendingFiles != rowCount)
+                    if (pendingFiles != rowCount)
                     {
                         populateFileList(newActiveFileList);
-                    }                    
+                        progressBar1.Value = 0;
+                    }
                 }
-                
+
             };
             timer.Start();
 
-           // dataGridView1.CellMouseClick += removeHandler;
+             dataGridView1.CellMouseClick += removeHandler;
 
         }
 
@@ -60,9 +63,18 @@ namespace TorrentCast
             var column = dataGridView1.Columns[e.ColumnIndex];
             if (column.Name == "actions")
             {
-                string filepath = dataGridView1.Rows[e.RowIndex].Cells[2].Value?.ToString();
+               
                 string fileName = dataGridView1.Rows[e.RowIndex].Cells[1].Value?.ToString();
-                MessageBox.Show("removing "+filepath + "\\" + fileName);
+
+                //todo pull from config later on
+
+                String destination = "Active";
+                string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string activeDirectory = Path.Combine(localDirectory, destination);
+                string targetFile = activeDirectory + "\\" + fileName;
+                fileKit.archiveFiles(targetFile);
+                dataGridView1.Rows.Clear();
+
 
             }
         }
@@ -116,7 +128,7 @@ namespace TorrentCast
 
                 var buttonCell = new DataGridViewButtonCell
                 {
-                    Value = "Remove" 
+                    Value = "Remove"
                 };
 
                 dataGridView1.Rows[rowIndex].Cells["actions"] = buttonCell;
@@ -124,27 +136,37 @@ namespace TorrentCast
             }
 
         }
-        private void SendButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn )
-            {
 
-                // implement sending logic
-            }
-        }
+        //private void SendButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is Button btn)
+        //    {
 
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn )
-            {
-            }
-        }
-        private void button2_Click(object sender, EventArgs e)
+        //        // implement sending logic
+        //    }
+        //}
+
+        //private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is Button btn)
+        //    {
+        //    }
+        //}
+        private async void button2_Click(object sender, EventArgs e)
         {
             // process the active file list
             string[] activeFileList = getActiveFileList();
-            FTPkit.UploadViaFtp(config, activeFileList);
 
+            Task<int> task = Task.Run(() =>
+            {
+
+                return FTPkit.UploadViaFtp(config, activeFileList);
+
+            });
+
+            int uploaded = await task;
+            MessageBox.Show(uploaded + " torrents successfully uploaded. ", "TorrentCast Upload");
+            dataGridView1.Rows.Clear();
         }
 
         private void button4_Click(object sender, EventArgs e)

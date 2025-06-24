@@ -19,8 +19,6 @@ namespace TorrentCast
         {
             // Display the configuration in the form controls
             usernameTextbox.Text = config.username;
-            MessageBox.Show(config.password);
-            Debug.WriteLine("stored enc password in config :" + config.password);
             string password = cryptoKit.DecryptString(config.password);
             passwordTextbox.Text = config.password;
             urlTextbox.Text = config.ftpHost;

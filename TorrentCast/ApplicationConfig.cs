@@ -26,9 +26,24 @@ namespace TorrentCast
             //check if file exists
             if (!File.Exists(configPath))
             {
-                //todo raise some kind of error.
+                //generate blank cfg file.
+                ApplicationConfig cfg = new ApplicationConfig
+                {
+                    username = "",
+                    password = "",
+                    ftpHost = "yourHost",
+                    ftpPort = "21",
+                    activeFolder = "active",
+                    archiveFolder = "archive",
+                    remotePath = "/your/path"
+                };
 
-                
+                String stringCFG = JsonConvert.SerializeObject(cfg, Formatting.Indented);
+
+                FileStream fs = File.Create(configPath);
+                fs.Write(System.Text.Encoding.UTF8.GetBytes(stringCFG),0, System.Text.Encoding.UTF8.GetBytes(stringCFG).Length);
+                fs.Close();
+                jsonString = stringCFG; // Use the newly created config
             }
             else
             {

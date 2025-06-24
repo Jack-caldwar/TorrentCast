@@ -34,7 +34,7 @@ namespace TorrentCast
 
         public static string DecryptString(string cipherText)
         {
-            Debug.WriteLine("decrypting :" + cipherText);
+            //Debug.WriteLine("decrypting :" + cipherText);
             using (var aesAlg = Aes.Create())
             {
                 aesAlg.Key = GenerateKey();
