@@ -17,7 +17,7 @@ namespace TorrentCast
         private ApplicationConfig config;
         public Form1(ApplicationConfig config)
         {
-            this.AutoScaleMode = AutoScaleMode.None;
+
             InitializeComponent();
 
             this.config = config;
@@ -45,7 +45,6 @@ namespace TorrentCast
                     if (pendingFiles != rowCount)
                     {
                         populateFileList(newActiveFileList);
-                        progressBar1.Value = 0;
                     }
                 }
 
@@ -157,16 +156,22 @@ namespace TorrentCast
             // process the active file list
             string[] activeFileList = getActiveFileList();
 
+            int progressBarMax = activeFileList.Length;
+            progressBar1.Maximum = progressBarMax;
+            progressBar1.Value = 0;
+
+            var progress = new Progress<int>(value => {
+                progressBar1.Value = value; // This runs on the UI thread
+            });
+
             Task<int> task = Task.Run(() =>
             {
-
-                return FTPkit.UploadViaFtp(config, activeFileList);
+                return FTPkit.UploadViaFtpProgressUpdate(config, activeFileList, progress);
 
             });
 
             int uploaded = await task;
-            MessageBox.Show(uploaded + " torrents successfully uploaded. ", "TorrentCast Upload");
-            dataGridView1.Rows.Clear();
+            MessageBox.Show(uploaded + " torrents successfully uploaded.", "TorrentCast Upload");
         }
 
         private void button4_Click(object sender, EventArgs e)
