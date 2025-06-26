@@ -21,38 +21,60 @@ namespace TorrentCast
             InitializeComponent();
 
             this.config = config;
-            //populateFileList(activeFileList);
+            setupWatcher();            
+            populateFileList();
 
-            DispatcherTimer timer = new DispatcherTimer
+            dataGridView1.CellMouseClick += removeHandler;
+
+        }
+        private FileSystemWatcher watcher;
+
+        private void setupWatcher()
+        {
+            watcher = new FileSystemWatcher();
+            watcher.Path = @"C:\Users\the_s\source\repos\TorrentCast\TorrentCast\bin\Debug\Active"; // 👈 your active torrent folder
+            watcher.IncludeSubdirectories = false;
+            watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite;
+
+            watcher.Created += OnFileChanged;
+            watcher.Deleted += OnFileChanged;
+            watcher.Renamed += OnFileRenamed;
+
+            watcher.EnableRaisingEvents = true;
+        }
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine($"File {e.ChangeType}: {e.FullPath}");
+            refreshUI(); // Safe call below
+        }
+
+        private void OnFileRenamed(object sender, RenamedEventArgs e)
+        {
+            Console.WriteLine($"File Renamed: {e.OldFullPath} → {e.FullPath}");
+            refreshUI(); // Also safe call below
+        }
+
+        private void refreshUI()
+        {
+            if (InvokeRequired)
             {
-                Interval = TimeSpan.FromSeconds(2) 
-            };
-            timer.Tick += (sender, e) =>
-            {
-                // check active folder for new files
-                // if new files are found, add them to the list
-                string[] newActiveFileList = getActiveFileList();
+                BeginInvoke(new Action(refreshUI));
+                return;
+            }
 
-                int rowCount = dataGridView1.RowCount - 1;
-                torrentCount.Text = rowCount.ToString();
+            // Now on UI thread — clear and repopulate DataGridView
+            dataGridView1.Rows.Clear();
 
-
-                int pendingFiles = newActiveFileList.Length;
-
-
-                if (pendingFiles != 0)
-                {
-                    if (pendingFiles != rowCount)
-                    {
-                        populateFileList(newActiveFileList);
-                    }
-                }
-
-            };
-            timer.Start();
-
-             dataGridView1.CellMouseClick += removeHandler;
-
+            //string[] files = getActiveFileList();
+            //int counter = 0;
+            //foreach (var file in files)
+            //{
+            //    counter++;
+            //    string fileName = Path.GetFileName(file);
+            //    string filePath = Path.GetDirectoryName(file);
+            //    dataGridView1.Rows.Add(counter, fileName, filePath);
+            //}
+            populateFileList();
         }
 
         private void removeHandler(object sender, DataGridViewCellMouseEventArgs e)
@@ -72,7 +94,7 @@ namespace TorrentCast
                 string activeDirectory = Path.Combine(localDirectory, destination);
                 string targetFile = activeDirectory + "\\" + fileName;
                 fileKit.archiveFiles(targetFile);
-                dataGridView1.Rows.Clear();
+                //dataGridView1.Rows.Clear();
 
 
             }
@@ -107,19 +129,27 @@ namespace TorrentCast
             string activeFileFolderPath = Path.Combine(localDirectory, activeFileFolder);
 
             string[] activeFileList = Directory.GetFiles(activeFileFolderPath);
+
+            //filter only .torrent files
+            activeFileList = Array.FindAll(activeFileList, file => file.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase));
+
             return activeFileList;
         }
 
-        private void populateFileList(string[] activeFileList)
+        private void populateFileList()
         {
+            
             dataGridView1.Rows.Clear();
             int counter = 0;
+            string[] activeFileList = getActiveFileList();
 
             foreach (string file in activeFileList)
             {
                 counter++;
-                String fileName = Path.GetFileName(file);
-                String filePath = Path.GetDirectoryName(file);
+                //remove extension
+                String fileName = Path.GetFileNameWithoutExtension(file);
+                //String fileName = Path.GetFileName(file);
+                //String filePath = Path.GetDirectoryName(file);
 
 
 
@@ -127,7 +157,7 @@ namespace TorrentCast
 
                 var buttonCell = new DataGridViewButtonCell
                 {
-                    Value = "Remove"
+                    Value = "--Remove--"
                 };
 
                 dataGridView1.Rows[rowIndex].Cells["actions"] = buttonCell;
