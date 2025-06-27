@@ -21,8 +21,11 @@ namespace TorrentCast
         public ApplicationConfig LoadConfig()
         {
             string jsonString = null;
+            ApplicationConfig config = new ApplicationConfig();
+
             string basePath = AppContext.BaseDirectory;
             string configPath = Path.Combine(basePath, "config.json");
+
             //check if file exists
             if (!File.Exists(configPath))
             {
@@ -47,17 +50,26 @@ namespace TorrentCast
             }
             else
             {
-                jsonString = File.ReadAllText(configPath);
-            }
+                try
+                {
+                    jsonString = File.ReadAllText(configPath);
+                    config = JsonConvert.DeserializeObject<ApplicationConfig>(jsonString);
 
-            ApplicationConfig config = JsonConvert.DeserializeObject<ApplicationConfig>(jsonString);
-            this.username = config.username;
-            this.password = config.password;
-            this.ftpHost = config.ftpHost;
-            this.ftpPort = config.ftpPort;
-            this.activeFolder = config.activeFolder;
-            this.archiveFolder = config.archiveFolder;
-            this.remotePath = config.remotePath;
+                    this.username = config.username;
+                    this.password = config.password;
+                    this.ftpHost = config.ftpHost;
+                    this.ftpPort = config.ftpPort;
+                    this.activeFolder = config.activeFolder;
+                    this.archiveFolder = config.archiveFolder;
+                    this.remotePath = config.remotePath;
+                }
+                catch (JsonException ex)
+                {
+                    // something went wrong serializing the config file
+                    Console.WriteLine("Error parsing config file: " + ex.Message);
+
+                }
+            }
 
             //read out the config file
             return config;

@@ -45,13 +45,13 @@ namespace TorrentCast
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
             Console.WriteLine($"File {e.ChangeType}: {e.FullPath}");
-            refreshUI(); // Safe call below
+            refreshUI(); 
         }
 
         private void OnFileRenamed(object sender, RenamedEventArgs e)
         {
             Console.WriteLine($"File Renamed: {e.OldFullPath} → {e.FullPath}");
-            refreshUI(); // Also safe call below
+            refreshUI(); 
         }
 
         private void refreshUI()
@@ -62,18 +62,8 @@ namespace TorrentCast
                 return;
             }
 
-            // Now on UI thread — clear and repopulate DataGridView
             dataGridView1.Rows.Clear();
 
-            //string[] files = getActiveFileList();
-            //int counter = 0;
-            //foreach (var file in files)
-            //{
-            //    counter++;
-            //    string fileName = Path.GetFileName(file);
-            //    string filePath = Path.GetDirectoryName(file);
-            //    dataGridView1.Rows.Add(counter, fileName, filePath);
-            //}
             populateFileList();
         }
 
@@ -110,10 +100,6 @@ namespace TorrentCast
             {
                 config.LoadConfig();
             };
-
-
-
-
 
         }
 
@@ -163,7 +149,7 @@ namespace TorrentCast
                 dataGridView1.Rows[rowIndex].Cells["actions"] = buttonCell;
 
             }
-
+            torrentCount.Text = counter.ToString();
         }
 
         //private void SendButton_Click(object sender, RoutedEventArgs e)

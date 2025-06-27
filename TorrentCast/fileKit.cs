@@ -111,7 +111,6 @@ namespace TorrentCast
                     catch (Exception ex)
                     {
                         MessageBox.Show("Cannot Delete " + torrent + "\n" + ex.Message);
-
                     }
                 }
             }
@@ -155,7 +154,6 @@ namespace TorrentCast
                     catch (Exception ex)
                     {
                         MessageBox.Show("Cannot Delete " + torrent + "\n" + ex.Message);
-
                     }
                 }
             }
