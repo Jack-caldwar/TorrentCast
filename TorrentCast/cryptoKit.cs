@@ -9,7 +9,6 @@ namespace TorrentCast
 {
     public class cryptoKit
     {
-        // Use a strong 256-bit key and IV (both 32 bytes and 16 bytes respectively)
         public static string EncryptString(string plainText)
         {
             using (var aesAlg = Aes.Create())
