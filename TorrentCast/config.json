@@ -1,8 +1,0 @@
-{
-  "ftpHost": "yourhost",
-  "ftpPort": 21,
-  "username": "username",
-  "password": "enc-password",
-  "remotePath": "path for remote upload",
-  "useSftp": false
-}
