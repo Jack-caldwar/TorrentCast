@@ -1,8 +1,8 @@
 {
-  "ftpHost": "haze.seedhost.eu",
+  "ftpHost": "yourhost",
   "ftpPort": 21,
-  "username": "argentius",
-  "password": "N+iREG46kpzEuEuV7IQoDTk+LIPH5hfHuxAKlUyg9hs=",
-  "remotePath": "/downloads/grab",
+  "username": "username",
+  "password": "enc-password",
+  "remotePath": "path for remote upload",
   "useSftp": false
 }
