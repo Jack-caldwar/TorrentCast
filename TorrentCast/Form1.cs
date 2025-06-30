@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Threading;
-using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
 
 namespace TorrentCast
@@ -21,7 +17,7 @@ namespace TorrentCast
             InitializeComponent();
 
             this.config = config;
-            setupWatcher();            
+            setupWatcher();
             populateFileList();
 
             dataGridView1.CellMouseClick += removeHandler;
@@ -32,7 +28,12 @@ namespace TorrentCast
         private void setupWatcher()
         {
             watcher = new FileSystemWatcher();
-            watcher.Path = @"C:\Users\the_s\source\repos\TorrentCast\TorrentCast\bin\Debug\Active"; // 👈 your active torrent folder
+
+            String destination = "Active";
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string destinationDir = Path.Combine(localDirectory, destination);
+
+            watcher.Path = destinationDir;
             watcher.IncludeSubdirectories = false;
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite;
 
@@ -45,13 +46,13 @@ namespace TorrentCast
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
             Console.WriteLine($"File {e.ChangeType}: {e.FullPath}");
-            refreshUI(); 
+            refreshUI();
         }
 
         private void OnFileRenamed(object sender, RenamedEventArgs e)
         {
             Console.WriteLine($"File Renamed: {e.OldFullPath} → {e.FullPath}");
-            refreshUI(); 
+            refreshUI();
         }
 
         private void refreshUI()
@@ -74,7 +75,7 @@ namespace TorrentCast
             var column = dataGridView1.Columns[e.ColumnIndex];
             if (column.Name == "actions")
             {
-               
+
                 string fileName = dataGridView1.Rows[e.RowIndex].Cells[1].Value?.ToString();
 
                 //todo pull from config later on
@@ -108,26 +109,13 @@ namespace TorrentCast
 
         }
 
-        private static string[] getActiveFileList()
-        {
-            String activeFileFolder = "Active";
-            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string activeFileFolderPath = Path.Combine(localDirectory, activeFileFolder);
-
-            string[] activeFileList = Directory.GetFiles(activeFileFolderPath);
-
-            //filter only .torrent files
-            activeFileList = Array.FindAll(activeFileList, file => file.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase));
-
-            return activeFileList;
-        }
 
         private void populateFileList()
         {
-            
+
             dataGridView1.Rows.Clear();
             int counter = 0;
-            string[] activeFileList = getActiveFileList();
+            string[] activeFileList = fileKit.getActiveTorrents();
 
             foreach (string file in activeFileList)
             {
@@ -152,31 +140,17 @@ namespace TorrentCast
             torrentCount.Text = counter.ToString();
         }
 
-        //private void SendButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is Button btn)
-        //    {
-
-        //        // implement sending logic
-        //    }
-        //}
-
-        //private void RemoveButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is Button btn)
-        //    {
-        //    }
-        //}
         private async void button2_Click(object sender, EventArgs e)
         {
             // process the active file list
-            string[] activeFileList = getActiveFileList();
+            string[] activeFileList = fileKit.getActiveTorrents();
 
             int progressBarMax = activeFileList.Length;
             progressBar1.Maximum = progressBarMax;
             progressBar1.Value = 0;
 
-            var progress = new Progress<int>(value => {
+            var progress = new Progress<int>(value =>
+            {
                 progressBar1.Value = value; // This runs on the UI thread
             });
 

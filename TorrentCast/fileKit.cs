@@ -81,7 +81,23 @@ namespace TorrentCast
 
 
         }
+        public static string[] getActiveTorrents()
+        {
+            //todo pull destination from config
+            String destination = "Active";
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string destinationDir = Path.Combine(localDirectory, destination);
 
+            string[] activeTorrents = Array.Empty<string>();
+
+            CheckDestinationExists(destinationDir);
+
+            activeTorrents = Directory.GetFiles(destinationDir);
+
+            activeTorrents = Array.FindAll(activeTorrents, file => file.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase));
+
+            return activeTorrents;
+        }
 
         private static void CheckDestinationExists(string destination)
         {
