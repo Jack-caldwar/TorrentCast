@@ -99,7 +99,7 @@ namespace TorrentCast
             return activeTorrents;
         }
 
-        private static void CheckDestinationExists(string destination)
+        public static void CheckDestinationExists(string destination)
         {
             if (!Directory.Exists(destination))
             {

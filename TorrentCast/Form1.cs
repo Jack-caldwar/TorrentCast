@@ -6,9 +6,11 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace TorrentCast
 {
+    
     public partial class Form1 : Form
     {
         int counter = 0;
+        string selectHeader = "Select";
 
         private ApplicationConfig config;
         public Form1(ApplicationConfig config)
@@ -20,7 +22,6 @@ namespace TorrentCast
             setupWatcher();
             populateFileList();
 
-            dataGridView1.CellMouseClick += removeHandler;
 
         }
         private FileSystemWatcher watcher;
@@ -32,6 +33,8 @@ namespace TorrentCast
             String destination = "Active";
             string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string destinationDir = Path.Combine(localDirectory, destination);
+
+            fileKit.CheckDestinationExists(destinationDir);
 
             watcher.Path = destinationDir;
             watcher.IncludeSubdirectories = false;
@@ -63,33 +66,11 @@ namespace TorrentCast
                 return;
             }
 
-            dataGridView1.Rows.Clear();
+            activeGrid.Rows.Clear();
 
             populateFileList();
         }
 
-        private void removeHandler(object sender, DataGridViewCellMouseEventArgs e)
-        {
-
-
-            var column = dataGridView1.Columns[e.ColumnIndex];
-            if (column.Name == "actions")
-            {
-
-                string fileName = dataGridView1.Rows[e.RowIndex].Cells[1].Value?.ToString();
-
-                //todo pull from config later on
-
-                String destination = "Active";
-                string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string activeDirectory = Path.Combine(localDirectory, destination);
-                string targetFile = activeDirectory + "\\" + fileName;
-                fileKit.archiveFiles(targetFile);
-                //dataGridView1.Rows.Clear();
-
-
-            }
-        }
 
 
         private void button1_Click(object sender, EventArgs e)
@@ -113,7 +94,7 @@ namespace TorrentCast
         private void populateFileList()
         {
 
-            dataGridView1.Rows.Clear();
+            activeGrid.Rows.Clear();
             int counter = 0;
             string[] activeFileList = fileKit.getActiveTorrents();
 
@@ -127,15 +108,9 @@ namespace TorrentCast
 
 
 
-                int rowIndex = dataGridView1.Rows.Add(counter, fileName);
+                int rowIndex = activeGrid.Rows.Add(counter, fileName);
 
-                var buttonCell = new DataGridViewButtonCell
-                {
-                    Value = "--Remove--"
-                };
-
-                dataGridView1.Rows[rowIndex].Cells["actions"] = buttonCell;
-
+                
             }
             torrentCount.Text = counter.ToString();
         }
@@ -184,6 +159,31 @@ namespace TorrentCast
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void MakeActiveButton_Click(object sender, EventArgs e)
+        {
+//get Active DGV
+            DataGridView active = activeGrid;
+            DataGridView download = DownloadGrid;
+//loop over each row
+            foreach (DataGridViewRow row in active.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+//get selected rows
+                    bool selected = row.Cells[selectHeader].Value as bool? ??  false;
+            
+                    if (selected)
+                    {
+                        row.Cells[selectHeader].Value = false;
+//move to Download DGV
+                        active.Rows.Remove(row);
+                        download.Rows.Add(row);
+                        
+                    }
+                }
+            }
         }
     }
 }
