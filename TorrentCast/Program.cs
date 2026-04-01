@@ -17,22 +17,49 @@ namespace TorrentCast
     {
         static ApplicationConfig config = new ApplicationConfig();
         private static bool firstInstance;
+        private static Mutex appMutex;
 
         [STAThread]
         static void Main()
         {
-            var mutex = new Mutex(true, "TorrentCastMutex", out firstInstance);
+            string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "launch.log");
 
+            try
+            {
+                string[] startupArgs = Environment.GetCommandLineArgs();
 
+                File.AppendAllText(
+                    logPath,
+                    $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] " +
+                    $"ArgCount={startupArgs.Length} " +
+                    $"Args={string.Join(" | ", startupArgs)}" +
+                    Environment.NewLine
+                );
+            }
+            catch
+            {
+                // don't let logging break app startup
+            }
+
+            appMutex = new Mutex(true, "TorrentCastMutex", out firstInstance);
+            File.AppendAllText(logPath, "mutex :" + firstInstance + Environment.NewLine);
             if (!firstInstance)
             {
+                File.AppendAllText( logPath, "duplicate entity found- switching to passover mode." +    Environment.NewLine);
+
                 using (var client = new NamedPipeClientStream(".", "TorrentCastPipe", PipeDirection.Out))
                 {
                     client.Connect();
                     using (var writer = new StreamWriter(client))
                     {
-                        foreach (var arg in Environment.GetCommandLineArgs())
-                            writer.WriteLine(arg);
+                        foreach (var arg in Environment.GetCommandLineArgs()) {
+
+                            if (! arg.EndsWith("exe")) {
+                                File.AppendAllText(logPath, "sending arg :" + arg  + Environment.NewLine);
+                                writer.WriteLine(arg);
+                                // skip the executable passed as first param
+                            }
+                        }
                     }
                 }
 
@@ -40,6 +67,10 @@ namespace TorrentCast
             }
             else
             {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                File.AppendAllText(logPath, "First launch" + Environment.NewLine);
+                Form1 ui = new Form1(config);
                 var listenerThread = new Thread(() =>
                 {
                     while (true)
@@ -52,7 +83,9 @@ namespace TorrentCast
                             while ((line = reader.ReadLine()) != null)
                             {
                                 String[] path = { line };
+                                File.AppendAllText(logPath, "recieving arg : " + line + Environment.NewLine);
                                 fileKit.moveFilesToActive(path);
+                                ui.immediateDownload(path);
                             }
                         }
                     }
@@ -63,8 +96,7 @@ namespace TorrentCast
 
                 try
                 {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
+
 
                     //get file paths
                     String[] paths = GetTorrentPaths();
@@ -76,15 +108,16 @@ namespace TorrentCast
                     //DebugOutputConfig();
 
                     // if no file paths are passed, show the UI
-                    Form1 ui = new Form1(config);
+                    
                     if (paths.Length == 1)
                     {
-                        Application.Run(ui);
+                        Application.Run(ui);                        
                         return;
                     }
                     else if (paths.Length == 2)
                     {
                         //move file to active folder and load ui
+                        //MessageBox.Show("TorrentCast is already running. Adding torrent to active list." + paths[1], "TorrentCast");
                         fileKit.moveFilesToActive(paths);
                         Application.Run(ui);
 

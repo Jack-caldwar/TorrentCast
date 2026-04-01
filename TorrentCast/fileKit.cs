@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Shapes;
@@ -56,11 +57,38 @@ namespace TorrentCast
 
             foreach (var path in paths)
             {
-                string fileName = Path.GetFileName(path);
+                string fileName = Path.GetFileName(path) ;
+                //if (fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                //    continue;
+
                 destination = Path.Combine(destinationDir, fileName);
                 if (!fileName.Contains(".exe"))
                 {
                     MoveOrReplace(path, destination);
+                }
+            }
+        }
+        public static void recoverFiles(string[] paths)
+        {
+            //todo pull destination from config
+            String destination = "Active";
+            String source = "Failed";
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string destinationDir = Path.Combine(localDirectory, destination);
+            string sourceDir = Path.Combine(localDirectory, source);
+
+            CheckDestinationExists(destinationDir);
+
+            foreach (var path in paths)
+            {
+                string fileName = Path.GetFileName(path) + ".torrent";
+                destination = Path.Combine(destinationDir, fileName);
+                source = Path.Combine(sourceDir, fileName);
+
+                if (!fileName.Contains(".exe"))
+                {
+
+                    MoveOrReplace(source, destination);
                 }
             }
         }
@@ -132,6 +160,25 @@ namespace TorrentCast
             }
 
         }
+        public static void DeleteArchived(List<String> paths)
+        {
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string activeDirPath = Path.Combine(localDirectory, "Archive");
+            foreach (var filename in paths)
+            {
+                try
+                {
+                    File.Delete(activeDirPath + "\\" + filename + ".torrent");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Cannot Delete " + filename + "\n" + ex.Message);
+
+                }
+            }
+
+        }
+       
 
         public static string[] getFailedTorrents()
         {
@@ -174,6 +221,26 @@ namespace TorrentCast
                 }
             }
         }
+
+        public static void DeleteFailed(List<String> paths)
+        {
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string activeDirPath = Path.Combine(localDirectory, "Failed");
+            foreach (var filename in paths)
+            {
+                try
+                {
+                    File.Delete(activeDirPath + "\\" + filename + ".torrent");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Cannot Delete " + filename + "\n" + ex.Message);
+
+                }
+            }
+
+        }
+
         internal static void DeleteActive()
         {
             String destination = "Active";
@@ -212,6 +279,50 @@ namespace TorrentCast
             string fileName = Path.GetFileName(path);
             destination = Path.Combine(destinationDir, fileName);
             MoveOrReplace(path, destination);
+        }
+
+        public static void MoveFailed(List<string> paths)
+        {
+            //todo pull destination from config
+            String destination = "Failed";
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string destinationDir = Path.Combine(localDirectory, destination);
+
+            string from = "Active";
+            string fromDir = Path.Combine(localDirectory, from);
+            
+
+            CheckDestinationExists(destinationDir);
+
+                foreach (var path in paths)
+                {
+                    string fileName = Path.GetFileName(path) + ".torrent";
+                    destination = Path.Combine(destinationDir, fileName);
+                    string source = Path.Combine(fromDir, fileName);
+                MoveOrReplace(source, destination);
+                }
+
+
+        }
+
+        internal static void DeleteActiveTorrent(List<String> paths)
+        {
+
+
+            string localDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string activeDirPath = Path.Combine(localDirectory, "Active");
+            foreach (var filename in paths)
+            {
+                try
+                {
+                    File.Delete(activeDirPath + "\\" + filename + ".torrent");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Cannot Delete " + filename + "\n" + ex.Message);
+
+                }
+            }
         }
     }
 }
